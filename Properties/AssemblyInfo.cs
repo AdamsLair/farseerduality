@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Farseer Physics XNA")]
-[assembly: AssemblyProduct("Farseer Physics XNA")]
+[assembly: AssemblyTitle("Farseer Physics Duality")]
+[assembly: AssemblyProduct("Farseer Physics Duality")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Farseer Physics Engine")]
 [assembly: AssemblyCopyright("Copyright © Farseer Physics 2011")]
@@ -31,4 +31,4 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
-[assembly: AssemblyVersion("3.3.*")]
+[assembly: AssemblyVersion("3.3.5")]

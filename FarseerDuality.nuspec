@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>AdamsLair.FarseerDuality</id>
+    <version>$version$</version>
+	<authors>See original project authors</authors>
+    <title>AdamsLair.FarseerDuality</title>
+    <projectUrl>https://github.com/AdamsLair/farseerduality</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A custom version of Farseer Physics for being used with the Duality framework. Forked from https://farseerphysics.codeplex.com/</description>
+  </metadata>
+  <files>
+    <file src="bin\Release\FarseerDuality.dll" target="lib" />
+    <file src="bin\Release\FarseerDuality.xml" target="lib" />
+    <file src="bin\Release\FarseerDuality.pdb" target="lib" />
+  </files>
+</package>
