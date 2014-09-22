@@ -852,7 +852,18 @@ namespace FarseerPhysics.Dynamics
         /// <param name="force">The force.</param>
         public void ApplyForce(ref Vector2 force)
         {
-            ApplyForce(ref force, ref Xf.Position);
+            Debug.Assert(!float.IsNaN(force.X));
+            Debug.Assert(!float.IsNaN(force.Y));
+
+            if (_bodyType == BodyType.Dynamic)
+            {
+                if (Awake == false)
+                {
+                    Awake = true;
+                }
+
+                Force += force;
+            }
         }
         /// <summary>
         /// Applies a force at the center of mass.
@@ -860,7 +871,7 @@ namespace FarseerPhysics.Dynamics
         /// <param name="force">The force.</param>
         public void ApplyForce(Vector2 force)
         {
-            ApplyForce(ref force, ref Xf.Position);
+            ApplyForce(ref force);
         }
         /// <summary>
         /// Apply a force at a world point. If the force is not
