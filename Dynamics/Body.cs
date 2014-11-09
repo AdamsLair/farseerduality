@@ -1020,18 +1020,21 @@ namespace FarseerPhysics.Dynamics
 
             // Accumulate mass over all fixtures.
             Vector2 center = Vector2.Zero;
-            foreach (Fixture f in FixtureList)
-            {
-                if (f.Shape._density == 0)
-                {
-                    continue;
-                }
+			if (FixtureList != null)
+			{
+				foreach (Fixture f in FixtureList)
+				{
+					if (f.Shape._density == 0)
+					{
+						continue;
+					}
 
-                MassData massData = f.Shape.MassData;
-                _mass += massData.Mass;
-                center += massData.Mass * massData.Centroid;
-                _inertia += massData.Inertia;
-            }
+					MassData massData = f.Shape.MassData;
+					_mass += massData.Mass;
+					center += massData.Mass * massData.Centroid;
+					_inertia += massData.Inertia;
+				}
+			}
 
             //Static bodies only have mass, they don't have other properties. A little hacky tho...
             if (BodyType == BodyType.Static)
