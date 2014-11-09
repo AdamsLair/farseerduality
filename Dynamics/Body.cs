@@ -162,11 +162,14 @@ namespace FarseerPhysics.Dynamics
                 Torque = 0.0f;
 
                 // Since the body type changed, we need to flag contacts for filtering.
-                for (int i = 0; i < FixtureList.Count; i++)
-                {
-                    Fixture f = FixtureList[i];
-                    f.Refilter();
-                }
+				if (this.FixtureList != null)
+				{
+					for (int i = 0; i < FixtureList.Count; i++)
+					{
+						Fixture f = FixtureList[i];
+						f.Refilter();
+					}
+				}
             }
         }
 
