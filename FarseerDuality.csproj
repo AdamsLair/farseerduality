@@ -40,9 +40,7 @@
       <HintPath>packages\AdamsLair.OpenTK.1.1.1.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collision\Collision.cs" />
@@ -110,7 +108,6 @@
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\GravityController.cs" />
     <Compile Include="Controllers\VelocityLimitController.cs" />
-    <Compile Include="DebugView.cs" />
     <Compile Include="Dynamics\Body.cs" />
     <Compile Include="Dynamics\BreakableBody.cs" />
     <Compile Include="Dynamics\ContactManager.cs" />
