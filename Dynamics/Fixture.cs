@@ -30,7 +30,7 @@ using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics.Contacts;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Dynamics
 {

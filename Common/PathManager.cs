@@ -5,7 +5,7 @@ using FarseerPhysics.Common;
 using FarseerPhysics.Common.Decomposition;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Joints;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Factories
 {

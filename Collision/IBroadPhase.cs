@@ -1,6 +1,6 @@
 ﻿using System;
 using FarseerPhysics.Dynamics;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Collision
 {

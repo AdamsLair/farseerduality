@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Dynamics.Joints
 {

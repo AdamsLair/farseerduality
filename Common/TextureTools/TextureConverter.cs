@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using OpenTK;
+using Duality;
+using FarseerPhysics.Wrapper;
 
 namespace FarseerPhysics.Common
 {
@@ -47,11 +48,11 @@ namespace FarseerPhysics.Common
         {
         }
 
-        public void Transform(Matrix4 transform)
+        internal void Transform(Matrix4 transform)
         {
             // Transform main polygon
             for (int i = 0; i < this.Count; i++)
-                this[i] = Vector2.Transform(this[i], transform);
+                this[i] = Matrix4.TransformVector(this[i], transform);
 
             // Transform holes
             Vector2[] temp = null;
@@ -143,7 +144,7 @@ namespace FarseerPhysics.Common
         /// <summary>
         /// Can be used for scaling.
         /// </summary>
-        public Matrix4 Transform
+        internal Matrix4 Transform
         {
             get { return _transform; }
             set { _transform = value; }
@@ -188,7 +189,10 @@ namespace FarseerPhysics.Common
             Initialize(null, null, null, null, null, null, null, null);
         }
 
-        public TextureConverter(byte? alphaTolerance, float? hullTolerance,
+        public TextureConverter(byte? alphaTolerance, float? hullTolerance, bool? holeDetection, bool? multipartDetection, bool? pixelOffsetOptimization)
+			: this(alphaTolerance, hullTolerance, holeDetection, multipartDetection, pixelOffsetOptimization, null) { }
+
+        internal TextureConverter(byte? alphaTolerance, float? hullTolerance,
             bool? holeDetection, bool? multipartDetection, bool? pixelOffsetOptimization, Matrix4? transform)
         {
             Initialize(null, null, alphaTolerance, hullTolerance, holeDetection,
@@ -199,8 +203,11 @@ namespace FarseerPhysics.Common
         {
             Initialize(data, width, null, null, null, null, null, null);
         }
+		
+        public TextureConverter(uint[] data, int width, byte? alphaTolerance, float? hullTolerance, bool? holeDetection, bool? multipartDetection, bool? pixelOffsetOptimization)
+			: this(data, width, alphaTolerance, hullTolerance, holeDetection, multipartDetection, pixelOffsetOptimization, null) { }
 
-        public TextureConverter(uint[] data, int width, byte? alphaTolerance,
+        internal TextureConverter(uint[] data, int width, byte? alphaTolerance,
             float? hullTolerance, bool? holeDetection, bool? multipartDetection,
             bool? pixelOffsetOptimization, Matrix4? transform)
         {

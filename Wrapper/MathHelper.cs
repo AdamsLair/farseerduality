@@ -5,8 +5,6 @@ using System.Text;
 
 namespace FarseerPhysics
 {
-	// ### MATCH ### OpenTK ### MATCH ###
-
 	internal static class MathHelper
 	{
 		// Fields

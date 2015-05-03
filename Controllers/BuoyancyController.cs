@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Controllers
 {

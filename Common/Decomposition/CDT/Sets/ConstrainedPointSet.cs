@@ -98,7 +98,7 @@ namespace Poly2Tri.Triangulation.Sets
             }
         }
 
-        /**
+        /*
          * TODO: TO BE IMPLEMENTED!
          * Peforms a validation on given input<br>
          * 1. Check's if there any constraint edges are crossing or collinear<br>

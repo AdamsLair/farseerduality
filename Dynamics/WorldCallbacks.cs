@@ -27,7 +27,7 @@ using FarseerPhysics.Collision;
 using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Dynamics
 {

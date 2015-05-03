@@ -28,7 +28,7 @@ using System.Diagnostics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Dynamics.Contacts
 {

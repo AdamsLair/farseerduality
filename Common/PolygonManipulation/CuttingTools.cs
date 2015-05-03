@@ -3,7 +3,7 @@ using System.Diagnostics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common.PolygonManipulation
 {

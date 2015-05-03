@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common.ConvexHull
 {

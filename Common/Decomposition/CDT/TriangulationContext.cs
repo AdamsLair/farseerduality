@@ -39,7 +39,6 @@ namespace Poly2Tri.Triangulation
     {
         public readonly List<TriangulationPoint> Points = new List<TriangulationPoint>(200);
         public readonly List<DelaunayTriangle> Triangles = new List<DelaunayTriangle>();
-        private int _stepTime = -1;
 
         public TriangulationContext()
         {
@@ -69,10 +68,7 @@ namespace Poly2Tri.Triangulation
 
         public abstract TriangulationConstraint NewConstraint(TriangulationPoint a, TriangulationPoint b);
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void Update(string message)
-        {
-        }
+		public void Update(string message) { }
 
         public virtual void Clear()
         {

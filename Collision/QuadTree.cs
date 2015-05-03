@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FarseerPhysics.Collision;
-using OpenTK;
+using Duality;
 
 public class Element<T>
 {
@@ -256,7 +256,10 @@ public class QuadTree<T>
 
         Clear();
 
-        allNodes.ForEach(AddNode);
+		for (int i = 0; i < allNodes.Count; i++)
+		{
+			AddNode(allNodes[i]);
+		}
     }
 
     public void Clear()

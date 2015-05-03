@@ -4,7 +4,7 @@ using System.Linq;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common.PhysicsLogic
 {
@@ -54,7 +54,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
     /// This is an explosive... it explodes.
     /// </summary>
     /// <remarks>
-    /// Original Code by Steven Lu - see http://www.box2d.org/forum/viewtopic.php?f=3&t=1688
+    /// Original Code by Steven Lu
     /// Ported to Farseer 3.0 by Nicolás Hormazábal
     /// </remarks>
     public sealed class Explosion : PhysicsLogic

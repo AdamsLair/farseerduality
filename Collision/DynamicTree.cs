@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using FarseerPhysics.Common;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Collision
 {
@@ -229,7 +229,6 @@ namespace FarseerPhysics.Collision
         /// <summary>
         /// Get proxy user data.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="proxyId">The proxy id.</param>
         /// <returns>the proxy user data or 0 if the id is invalid.</returns>
         public T GetUserData(int proxyId)

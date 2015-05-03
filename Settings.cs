@@ -33,17 +33,6 @@ namespace FarseerPhysics
         public const float Epsilon = 1.192092896e-07f;
         public const float Pi = 3.14159265359f;
 
-        // Common
-
-        /// <summary>
-        /// Enabling diagnistics causes the engine to gather timing information.
-        /// You can see how much time it took to solve the contacts, solve CCD
-        /// and update the controllers.
-        /// NOTE: If you are using a debug view that shows performance counters,
-        /// you might want to enable this.
-        /// </summary>
-        public const bool EnableDiagnostics = true;
-
         /// <summary>
         /// The number of velocity iterations used in the solver.
         /// </summary>

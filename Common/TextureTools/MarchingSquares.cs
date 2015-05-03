@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FarseerPhysics.Collision;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common
 {
@@ -338,15 +338,15 @@ namespace FarseerPhysics.Common
             return a.X * b.Y - a.Y * b.X;
         }
 
-        /** Look-up table to relate polygon key with the vertices that should be used for
+        /*  Look-up table to relate polygon key with the vertices that should be used for
             the sub polygon in marching squares
-        **/
+        */
 
-        /** Perform a single celled marching square for for the given cell defined by (x0,y0) (x1,y1)
+        /*  Perform a single celled marching square for for the given cell defined by (x0,y0) (x1,y1)
             using the function f for recursive interpolation, given the look-up table 'fs' of
             the values of 'f' at cell vertices with the result to be stored in 'poly' given the actual
             coordinates of 'ax' 'ay' in the marching squares mesh.
-        **/
+        */
 
         private static int MarchSquare(sbyte[,] f, sbyte[,] fs, ref GeomPoly poly, int ax, int ay, float x0, float y0,
                                        float x1, float y1, int bin)

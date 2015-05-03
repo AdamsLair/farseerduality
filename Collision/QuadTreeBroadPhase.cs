@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
-using OpenTK;
+using Duality;
 
 public class QuadTreeBroadPhase : IBroadPhase
 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using OpenTK;
+using Duality;
+using Duality.Drawing;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Factories;
@@ -18,7 +19,7 @@ namespace FarseerPhysics.Common
     /// <summary>
     /// Return true if the specified color is inside the terrain.
     /// </summary>
-	public delegate bool TerrainTester(OpenTK.Graphics.Color4 color);
+	public delegate bool TerrainTester(ColorRgba color);
 
     /// <summary>
     /// Simple class to maintain a terrain.

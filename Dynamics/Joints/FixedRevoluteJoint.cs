@@ -26,7 +26,7 @@
 using System;
 using System.Diagnostics;
 using FarseerPhysics.Common;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Dynamics.Joints
 {

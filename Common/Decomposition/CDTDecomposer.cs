@@ -30,7 +30,7 @@
  */
 
 using System.Collections.Generic;
-using OpenTK;
+using Duality;
 using Poly2Tri.Triangulation;
 using Poly2Tri.Triangulation.Delaunay;
 using Poly2Tri.Triangulation.Delaunay.Sweep;

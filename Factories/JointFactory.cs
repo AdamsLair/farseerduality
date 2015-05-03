@@ -1,6 +1,6 @@
 ﻿using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Joints;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Factories
 {

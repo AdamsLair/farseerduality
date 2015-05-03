@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FarseerPhysics.Collision;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common
 {

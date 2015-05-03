@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using FarseerPhysics.Common.PolygonManipulation;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common.Decomposition
 {

@@ -25,7 +25,7 @@
 
 using System;
 using FarseerPhysics.Common;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Collision.Shapes
 {

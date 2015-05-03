@@ -4,7 +4,7 @@ using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Common.Decomposition;
 using FarseerPhysics.Dynamics;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Factories
 {

@@ -48,16 +48,16 @@ namespace Poly2Tri.Triangulation.Delaunay
 {
     public class DelaunayTriangle
     {
-        /** Neighbor pointers */
+        /* Neighbor pointers */
 
-        /** Flags to determine if an edge is a Delauney edge */
+        /* Flags to determine if an edge is a Delauney edge */
         public FixedBitArray3 EdgeIsConstrained;
 
-        /** Flags to determine if an edge is a Constrained edge */
+        /* Flags to determine if an edge is a Constrained edge */
         public FixedBitArray3 EdgeIsDelaunay;
         public FixedArray3<DelaunayTriangle> Neighbors;
 
-        /** Has this triangle been marked as an interior triangle? */
+        /* Has this triangle been marked as an interior triangle? */
 
         public FixedArray3<TriangulationPoint> Points;
 

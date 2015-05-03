@@ -26,7 +26,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using OpenTK;
+using Duality;
 
 namespace FarseerPhysics.Common
 {
