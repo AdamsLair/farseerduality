@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using FarseerPhysics.Collision;
-using FarseerPhysics.Wrapper;
 using Duality;
 
 namespace FarseerPhysics.Common
@@ -240,7 +239,7 @@ namespace FarseerPhysics.Common
             Matrix4.CreateRotationZ(value, out rotationMatrix);
 
             for (int i = 0; i < Count; i++)
-                this[i] = Matrix4.TransformVector(this[i], rotationMatrix);
+                this[i] = Vector2.Transform(this[i], rotationMatrix);
         }
 
         /// <summary>

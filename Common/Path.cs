@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Duality;
-using FarseerPhysics.Wrapper;
 
 namespace FarseerPhysics.Common
 {
@@ -123,7 +122,7 @@ namespace FarseerPhysics.Common
             Matrix4.CreateRotationZ(value, out rotationMatrix);
 
             for (int i = 0; i < ControlPoints.Count; i++)
-                ControlPoints[i] = Matrix4.TransformVector(ControlPoints[i], rotationMatrix);
+                ControlPoints[i] = Vector2.Transform(ControlPoints[i], rotationMatrix);
         }
 
         public override string ToString()

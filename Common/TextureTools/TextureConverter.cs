@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Duality;
-using FarseerPhysics.Wrapper;
 
 namespace FarseerPhysics.Common
 {
@@ -52,7 +51,7 @@ namespace FarseerPhysics.Common
         {
             // Transform main polygon
             for (int i = 0; i < this.Count; i++)
-                this[i] = Matrix4.TransformVector(this[i], transform);
+                this[i] = Vector2.Transform(this[i], transform);
 
             // Transform holes
             Vector2[] temp = null;

@@ -40,8 +40,8 @@
     <NoWarn>1591, 1573, 0162</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DualityPrimitives, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AdamsLair.Duality.Primitives.1.0.0\lib\DualityPrimitives.dll</HintPath>
+    <Reference Include="DualityPrimitives, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\AdamsLair.Duality.Primitives.1.0.1\lib\DualityPrimitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -151,7 +151,6 @@
     <Compile Include="Wrapper\MathHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Wrapper\Matrix4.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
