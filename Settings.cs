@@ -32,6 +32,13 @@ namespace FarseerPhysics
         public const float MaxFloat = 3.402823466e+38f;
         public const float Epsilon = 1.192092896e-07f;
         public const float Pi = 3.14159265359f;
+		
+        /// <summary>
+        /// Enabling diagnistics causes the engine to gather timing information.
+        /// You can see how much time it took to solve the contacts, solve CCD
+        /// and update the controllers.
+        /// </summary>
+        public const bool EnableDiagnostics = true;
 
         /// <summary>
         /// The number of velocity iterations used in the solver.
