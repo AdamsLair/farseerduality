@@ -24,7 +24,6 @@
 */
 
 using FarseerPhysics.Collision;
-using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
 using Duality;
@@ -57,8 +56,6 @@ namespace FarseerPhysics.Dynamics
     public delegate void JointDelegate(Joint joint);
 
     public delegate void BodyDelegate(Body body);
-
-    public delegate void ControllerDelegate(Controller controller);
 
     public delegate bool CollisionFilterDelegate(Fixture fixtureA, Fixture fixtureB);
 

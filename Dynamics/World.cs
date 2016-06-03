@@ -28,7 +28,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Common;
-using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
 using Duality;
@@ -201,10 +200,6 @@ namespace FarseerPhysics.Dynamics
         /// </summary>
         public JointDelegate JointRemoved;
 
-        public ControllerDelegate ControllerAdded;
-
-        public ControllerDelegate ControllerRemoved;
-
         private float _invDt0;
         public Island Island = new Island();
         private Body[] _stack = new Body[64];
@@ -231,7 +226,6 @@ namespace FarseerPhysics.Dynamics
         {
             Flags = WorldFlags.ClearForces;
 
-            ControllerList = new List<Controller>();
             BodyList = new List<Body>(32);
             JointList = new List<Joint>(32);
         }
@@ -253,8 +247,6 @@ namespace FarseerPhysics.Dynamics
             ContactManager = new ContactManager(new DynamicTreeBroadPhase());
             Gravity = gravity;
         }
-
-        public List<Controller> ControllerList { get; private set; }
 
         public float UpdateTime { get; private set; }
 
@@ -679,12 +671,6 @@ namespace FarseerPhysics.Dynamics
             step.inv_dt = 1.0f / dt;
             step.dt = dt;
             step.dtRatio = _invDt0 * dt;
-
-            //Update controllers
-            for (int i = 0; i < ControllerList.Count; i++)
-            {
-                ControllerList[i].Update(dt);
-            }
 
 #if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
@@ -1313,31 +1299,6 @@ namespace FarseerPhysics.Dynamics
             }
         }
 
-        public void AddController(Controller controller)
-        {
-            Debug.Assert(!ControllerList.Contains(controller), "You are adding the same controller more than once.");
-
-            controller.World = this;
-            ControllerList.Add(controller);
-
-            if (ControllerAdded != null)
-                ControllerAdded(controller);
-        }
-
-        public void RemoveController(Controller controller)
-        {
-            Debug.Assert(ControllerList.Contains(controller),
-                         "You are removing a controller that is not in the simulation.");
-
-            if (ControllerList.Contains(controller))
-            {
-                ControllerList.Remove(controller);
-
-                if (ControllerRemoved != null)
-                    ControllerRemoved(controller);
-            }
-        }
-
         public Fixture TestPoint(Vector2 point)
         {
             AABB aabb;
@@ -1401,11 +1362,6 @@ namespace FarseerPhysics.Dynamics
             for (int i = BodyList.Count - 1; i >= 0; i--)
             {
                 RemoveBody(BodyList[i]);
-            }
-
-            for (int i = ControllerList.Count - 1; i >= 0; i--)
-            {
-                RemoveController(ControllerList[i]);
             }
 
             ProcessChanges();

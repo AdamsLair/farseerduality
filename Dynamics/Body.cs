@@ -29,7 +29,6 @@ using System.Diagnostics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
 using Duality;
@@ -74,7 +73,6 @@ namespace FarseerPhysics.Dynamics
         private static int _bodyIdCounter;
         internal float AngularVelocityInternal;
         public int BodyId;
-        public ControllerFilter ControllerFilter;
         internal BodyFlags Flags;
         internal Vector2 Force;
         internal float InvI;

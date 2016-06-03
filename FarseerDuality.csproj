@@ -104,10 +104,6 @@
     <Compile Include="Common\TextureTools\MSTerrain.cs" />
     <Compile Include="Common\TextureTools\TextureConverter.cs" />
     <Compile Include="Common\Vertices.cs" />
-    <Compile Include="Controllers\BuoyancyController.cs" />
-    <Compile Include="Controllers\Controller.cs" />
-    <Compile Include="Controllers\GravityController.cs" />
-    <Compile Include="Controllers\VelocityLimitController.cs" />
     <Compile Include="Dynamics\Body.cs" />
     <Compile Include="Dynamics\ContactManager.cs" />
     <Compile Include="Dynamics\Contacts\Contact.cs" />
