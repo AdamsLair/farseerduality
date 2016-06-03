@@ -13,7 +13,7 @@ del *.nupkg
 .nuget\nuget pack FarseerDuality.csproj -Properties Configuration=Release
 
 :: upload the nuget packages
-.nuget\nuget push *.nupkg
+.nuget\nuget push *.nupkg -Source "https://nuget.org"
 
 :: remove nupkg files after uploading them
 del *.nupkg
