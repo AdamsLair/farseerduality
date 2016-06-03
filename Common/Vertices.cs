@@ -7,9 +7,7 @@ using Duality;
 
 namespace FarseerPhysics.Common
 {
-#if !(XBOX360)
     [DebuggerDisplay("Count = {Count} Vertices = {ToString()}")]
-#endif
     public class Vertices : List<Vector2>
     {
         public Vertices()

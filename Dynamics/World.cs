@@ -215,9 +215,7 @@ namespace FarseerPhysics.Dynamics
         /// </summary>
         public bool Enabled = true;
 		
-#if (!SILVERLIGHT)
         private Stopwatch _watch = new Stopwatch();
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="World"/> class.
@@ -635,28 +633,22 @@ namespace FarseerPhysics.Dynamics
         /// <param name="dt">The amount of time to simulate, this should not vary.</param>
         public void Step(float dt)
         {
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
                 _watch.Start();
-#endif
 
             ProcessChanges();
 			
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
                 AddRemoveTime = _watch.ElapsedTicks;
-#endif
 
             //If there is no change in time, no need to calculate anything.
             if (dt == 0 || !Enabled)
             {
-#if (!SILVERLIGHT)
                 if (Settings.EnableDiagnostics)
                 {
                     _watch.Stop();
                     _watch.Reset();
                 }
-#endif
                 return;
             }
 
@@ -672,26 +664,20 @@ namespace FarseerPhysics.Dynamics
             step.dt = dt;
             step.dtRatio = _invDt0 * dt;
 
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
                 ControllersUpdateTime = _watch.ElapsedTicks - AddRemoveTime;
-#endif
 
             // Update contacts. This is where some contacts are destroyed.
             ContactManager.Collide();
 			
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
                 ContactsUpdateTime = _watch.ElapsedTicks - (AddRemoveTime + ControllersUpdateTime);
-#endif
 
             // Integrate velocities, solve velocity raints, and integrate positions.
             Solve(ref step);
 			
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
                 SolveUpdateTime = _watch.ElapsedTicks - (AddRemoveTime + ControllersUpdateTime + ContactsUpdateTime);
-#endif
 
             // Handle TOI events.
             if (Settings.ContinuousPhysics)
@@ -699,11 +685,9 @@ namespace FarseerPhysics.Dynamics
                 SolveTOI(ref step);
             }
 			
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
                 ContinuousPhysicsTime = _watch.ElapsedTicks -
                                         (AddRemoveTime + ControllersUpdateTime + ContactsUpdateTime + SolveUpdateTime);
-#endif
             _invDt0 = step.inv_dt;
 
             if ((Flags & WorldFlags.ClearForces) != 0)
@@ -711,7 +695,6 @@ namespace FarseerPhysics.Dynamics
                 ClearForces();
             }
 
-#if (!SILVERLIGHT)
             if (Settings.EnableDiagnostics)
             {
                 _watch.Stop();
@@ -720,7 +703,6 @@ namespace FarseerPhysics.Dynamics
                 UpdateTime = _watch.ElapsedTicks;
                 _watch.Reset();
             }
-#endif
         }
 
         /// <summary>

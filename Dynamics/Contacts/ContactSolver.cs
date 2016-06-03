@@ -463,21 +463,6 @@ namespace FarseerPhysics.Dynamics.Contacts
                             cp1.NormalImpulse = xx;
                             cp2.NormalImpulse = xy;
 
-#if B2_DEBUG_SOLVER 
-                            
-			                float k_errorTol = 1e-3f;
-
-					        // Postconditions
-					        dv1 = vB + MathUtils.Cross(wB, cp1.rB) - vA - MathUtils.Cross(wA, cp1.rA);
-					        dv2 = vB + MathUtils.Cross(wB, cp2.rB) - vA - MathUtils.Cross(wA, cp2.rA);
-
-					        // Compute normal velocity
-					        vn1 = Vector2.Dot(dv1, normal);
-					        vn2 = Vector2.Dot(dv2, normal);
-
-					        Debug.Assert(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
-					        Debug.Assert(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
-#endif
                             break;
                         }
 
@@ -520,15 +505,6 @@ namespace FarseerPhysics.Dynamics.Contacts
                             cp1.NormalImpulse = xx;
                             cp2.NormalImpulse = xy;
 
-#if B2_DEBUG_SOLVER 
-    // Postconditions
-					        dv1 = vB + MathUtils.Cross(wB, cp1.rB) - vA - MathUtils.Cross(wA, cp1.rA);
-
-					        // Compute normal velocity
-					        vn1 = Vector2.Dot(dv1, normal);
-
-					        Debug.Assert(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
-#endif
                             break;
                         }
 
@@ -572,15 +548,6 @@ namespace FarseerPhysics.Dynamics.Contacts
                             cp1.NormalImpulse = xx;
                             cp2.NormalImpulse = xy;
 
-#if B2_DEBUG_SOLVER 
-    // Postconditions
-					        dv2 = vB + MathUtils.Cross(wB, cp2.rB) - vA - MathUtils.Cross(wA, cp2.rA);
-
-					        // Compute normal velocity
-					        vn2 = Vector2.Dot(dv2, normal);
-
-					        Debug.Assert(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
-#endif
                             break;
                         }
 
