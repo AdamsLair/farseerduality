@@ -29,7 +29,6 @@ using System.Diagnostics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using FarseerPhysics.Common.PhysicsLogic;
 using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
@@ -81,7 +80,6 @@ namespace FarseerPhysics.Dynamics
         internal float InvI;
         internal float InvMass;
         internal Vector2 LinearVelocityInternal;
-        public PhysicsLogicFilter PhysicsLogicFilter;
         internal float SleepTime;
         internal Sweep Sweep; // the swept motion for CCD
         internal float Torque;
