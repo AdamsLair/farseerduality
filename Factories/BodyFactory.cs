@@ -345,41 +345,6 @@ namespace FarseerPhysics.Factories
                                           userData);
         }
 
-        public static BreakableBody CreateBreakableBody(World world, Vertices vertices, float density)
-        {
-            return CreateBreakableBody(world, vertices, density, null);
-        }
-
-        public static BreakableBody CreateBreakableBody(World world, Vertices vertices, float density, object userData)
-        {
-            return CreateBreakableBody(world, vertices, density, Vector2.Zero, userData);
-        }
-
-        /// <summary>
-        /// Creates a breakable body. You would want to remove collinear points before using this.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="vertices">The vertices.</param>
-        /// <param name="density">The density.</param>
-        /// <param name="position">The position.</param>
-        /// <returns></returns>
-        public static BreakableBody CreateBreakableBody(World world, Vertices vertices, float density, Vector2 position,
-                                                        object userData)
-        {
-            List<Vertices> triangles = EarclipDecomposer.ConvexPartition(vertices);
-
-            BreakableBody breakableBody = new BreakableBody(triangles, world, density, userData);
-            breakableBody.MainBody.Position = position;
-            world.AddBreakableBody(breakableBody);
-
-            return breakableBody;
-        }
-
-        public static BreakableBody CreateBreakableBody(World world, Vertices vertices, float density, Vector2 position)
-        {
-            return CreateBreakableBody(world, vertices, density, position, null);
-        }
-
         public static Body CreateLineArc(World world, float radians, int sides, float radius, Vector2 position,
                                          float angle, bool closed)
         {

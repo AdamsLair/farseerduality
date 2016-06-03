@@ -109,7 +109,6 @@
     <Compile Include="Controllers\GravityController.cs" />
     <Compile Include="Controllers\VelocityLimitController.cs" />
     <Compile Include="Dynamics\Body.cs" />
-    <Compile Include="Dynamics\BreakableBody.cs" />
     <Compile Include="Dynamics\ContactManager.cs" />
     <Compile Include="Dynamics\Contacts\Contact.cs" />
     <Compile Include="Dynamics\Contacts\ContactSolver.cs" />

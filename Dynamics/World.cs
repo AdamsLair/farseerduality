@@ -232,7 +232,6 @@ namespace FarseerPhysics.Dynamics
             Flags = WorldFlags.ClearForces;
 
             ControllerList = new List<Controller>();
-            BreakableBodyList = new List<BreakableBody>();
             BodyList = new List<Body>(32);
             JointList = new List<Joint>(32);
         }
@@ -256,8 +255,6 @@ namespace FarseerPhysics.Dynamics
         }
 
         public List<Controller> ControllerList { get; private set; }
-
-        public List<BreakableBody> BreakableBodyList { get; private set; }
 
         public float UpdateTime { get; private set; }
 
@@ -726,11 +723,6 @@ namespace FarseerPhysics.Dynamics
             if ((Flags & WorldFlags.ClearForces) != 0)
             {
                 ClearForces();
-            }
-
-            for (int i = 0; i < BreakableBodyList.Count; i++)
-            {
-                BreakableBodyList[i].Update();
             }
 
 #if (!SILVERLIGHT)
@@ -1346,19 +1338,6 @@ namespace FarseerPhysics.Dynamics
             }
         }
 
-        public void AddBreakableBody(BreakableBody breakableBody)
-        {
-            BreakableBodyList.Add(breakableBody);
-        }
-
-        public void RemoveBreakableBody(BreakableBody breakableBody)
-        {
-            //The breakable body list does not contain the body you tried to remove.
-            Debug.Assert(BreakableBodyList.Contains(breakableBody));
-
-            BreakableBodyList.Remove(breakableBody);
-        }
-
         public Fixture TestPoint(Vector2 point)
         {
             AABB aabb;
@@ -1427,11 +1406,6 @@ namespace FarseerPhysics.Dynamics
             for (int i = ControllerList.Count - 1; i >= 0; i--)
             {
                 RemoveController(ControllerList[i]);
-            }
-
-            for (int i = BreakableBodyList.Count - 1; i >= 0; i--)
-            {
-                RemoveBreakableBody(BreakableBodyList[i]);
             }
 
             ProcessChanges();
