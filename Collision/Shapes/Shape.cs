@@ -100,7 +100,7 @@ namespace FarseerPhysics.Collision.Shapes
         Circle = 0,
         Edge = 1,
         Polygon = 2,
-        Loop = 3,
+        Chain = 3,
         TypeCount = 4,
     }
 

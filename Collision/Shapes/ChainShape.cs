@@ -30,12 +30,12 @@ using Duality;
 namespace FarseerPhysics.Collision.Shapes
 {
     /// <summary>
-    /// A loop Shape is a free form sequence of line segments that form a circular list.
-    /// The loop may cross upon itself, but this is not recommended for smooth collision.
-    /// The loop has double sided collision, so you can use inside and outside collision.
+    /// A chain shape is a free form sequence of line segments.
+    /// The chain may cross upon itself, but this is not recommended for smooth collision.
+    /// The chain has double sided collision, so you can use inside and outside collision.
     /// Therefore, you may use any winding order.
     /// </summary>
-    public class LoopShape : Shape
+    public class ChainShape : Shape
     {
         private static EdgeShape _edgeShape = new EdgeShape();
 
@@ -43,40 +43,56 @@ namespace FarseerPhysics.Collision.Shapes
         /// The vertices. These are not owned/freed by the loop Shape.
         /// </summary>
         public Vertices Vertices;
+        private Vector2 _prevVertex, _nextVertex;
+        private bool _hasPrevVertex, _hasNextVertex;
 
-        private LoopShape()
+        private ChainShape()
             : base(0)
         {
-            ShapeType = ShapeType.Loop;
+            ShapeType = ShapeType.Chain;
             _radius = Settings.PolygonRadius;
         }
 
-        public LoopShape(Vertices vertices)
-            : base(0)
+        /// <summary>
+        /// Create a new chainshape from the vertices.
+        /// </summary>
+        /// <param name="vertices">The vertices to use. Must contain 2 or more vertices.</param>
+        /// <param name="createLoop">Set to true to create a closed loop. It connects the first vertice to the last, and automatically adjusts connectivity to create smooth collisions along the chain.</param>
+        public ChainShape(Vertices vertices, bool createLoop)
+            : this()
         {
-            ShapeType = ShapeType.Loop;
-            _radius = Settings.PolygonRadius;
+            Debug.Assert(vertices != null && vertices.Count >= 3);
+            Debug.Assert(vertices[0] != vertices[vertices.Count - 1]); // FPE. See http://www.box2d.org/forum/viewtopic.php?f=4&t=7973&p=35363
 
-            if (Settings.ConserveMemory)
-                Vertices = vertices;
-            else
-                // Copy vertices.
-                Vertices = new Vertices(vertices);
+            Vertices = new Vertices(vertices);
+
+            if (createLoop)
+            {
+                Vertices.Add(vertices[0]);
+                _prevVertex = Vertices[Vertices.Count - 2]; //FPE: We use the properties instead of the private fields here.
+                _nextVertex = Vertices[1]; //FPE: We use the properties instead of the private fields here.
+                _hasPrevVertex = true;
+                _hasNextVertex = true;
+            }
         }
 
         public override int ChildCount
         {
-            get { return Vertices.Count; }
+            get { return Vertices.Count - 1; }
         }
 
         public override Shape Clone()
         {
-            LoopShape loop = new LoopShape();
-            loop._density = _density;
-            loop._radius = _radius;
-            loop.Vertices = Vertices;
-            loop.MassData = MassData;
-            return loop;
+            ChainShape clone = new ChainShape();
+            clone._density = _density;
+            clone._radius = _radius;
+            clone._prevVertex = _prevVertex;
+            clone._nextVertex = _nextVertex;
+            clone._hasNextVertex = _hasNextVertex;
+            clone._hasPrevVertex = _hasPrevVertex;
+            clone.Vertices = Vertices;
+            clone.MassData = MassData;
+            return clone;
         }
 
         /// <summary>
@@ -87,26 +103,39 @@ namespace FarseerPhysics.Collision.Shapes
         public void GetChildEdge(ref EdgeShape edge, int index)
         {
             Debug.Assert(2 <= Vertices.Count);
-            Debug.Assert(0 <= index && index < Vertices.Count);
+            Debug.Assert(0 <= index && index < Vertices.Count - 1);
             edge.ShapeType = ShapeType.Edge;
             edge._radius = _radius;
 
-            int i0 = index - 1 >= 0 ? index - 1 : Vertices.Count - 1;
-            int i1 = index;
-            int i2 = index + 1 < Vertices.Count ? index + 1 : 0;
-            int i3 = index + 2;
-            while (i3 >= Vertices.Count)
+            edge.Vertex1 = Vertices[index + 0];
+            edge.Vertex2 = Vertices[index + 1];
+
+            if (index > 0)
             {
-                i3 -= Vertices.Count;
+                edge.Vertex0 = Vertices[index - 1];
+                edge.HasVertex0 = true;
+            }
+            else
+            {
+                edge.Vertex0 = _prevVertex;
+                edge.HasVertex0 = _hasPrevVertex;
             }
 
-            edge.Vertex0 = Vertices[i0];
-            edge.Vertex1 = Vertices[i1];
-            edge.Vertex2 = Vertices[i2];
-            edge.Vertex3 = Vertices[i3];
-
-			edge.HasVertex0 = Vector2.AngleBetween(edge.Vertex0, edge.Vertex1) > MathHelper.PiOver2;
-			edge.HasVertex3 = Vector2.AngleBetween(edge.Vertex2, edge.Vertex3) > MathHelper.PiOver2;
+            if (index < Vertices.Count - 2)
+            {
+                edge.Vertex3 = Vertices[index + 2];
+                edge.HasVertex3 = true;
+            }
+            else
+            {
+                edge.Vertex3 = _nextVertex;
+                edge.HasVertex3 = _hasNextVertex;
+            }
+            
+            // Old hack-fix for jittery collision at sharp (<90°) angles.
+            // See here: https://github.com/AdamsLair/duality/commit/924b25119a6634c77e71175e7f275db3d3d4e9dd
+            edge.HasVertex0 = edge.HasVertex0 && Vector2.AngleBetween(edge.Vertex0, edge.Vertex1) > MathHelper.PiOver2;
+            edge.HasVertex3 = edge.HasVertex3 && Vector2.AngleBetween(edge.Vertex2, edge.Vertex3) > MathHelper.PiOver2;
         }
 
         /// <summary>

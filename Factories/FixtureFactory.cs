@@ -28,10 +28,21 @@ namespace FarseerPhysics.Factories
         {
             return AttachLoopShape(vertices, body, null);
         }
-
+		
         public static Fixture AttachLoopShape(Vertices vertices, Body body, object userData)
         {
-            LoopShape shape = new LoopShape(vertices);
+            ChainShape shape = new ChainShape(vertices, true);
+            return body.CreateFixture(shape, userData);
+        }
+
+        public static Fixture AttachChainShape(Vertices vertices, Body body)
+        {
+            return AttachChainShape(vertices, body, null);
+        }
+
+        public static Fixture AttachChainShape(Vertices vertices, Body body, object userData)
+        {
+            ChainShape shape = new ChainShape(vertices, false);
             return body.CreateFixture(shape, userData);
         }
 
