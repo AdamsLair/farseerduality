@@ -442,12 +442,7 @@ namespace FarseerPhysics.Dynamics
 
                     // Wake up connected bodies.
                     bodyA.Awake = true;
-
-                    // WIP David
-                    if (!joint.IsFixedType())
-                    {
-                        bodyB.Awake = true;
-                    }
+                    bodyB.Awake = true;
 
                     // Remove from body 1.
                     if (joint.EdgeA.Prev != null)
@@ -468,47 +463,39 @@ namespace FarseerPhysics.Dynamics
                     joint.EdgeA.Prev = null;
                     joint.EdgeA.Next = null;
 
-                    // WIP David
-                    if (!joint.IsFixedType())
+                    // Remove from body 2
+                    if (joint.EdgeB.Prev != null)
                     {
-                        // Remove from body 2
-                        if (joint.EdgeB.Prev != null)
-                        {
-                            joint.EdgeB.Prev.Next = joint.EdgeB.Next;
-                        }
-
-                        if (joint.EdgeB.Next != null)
-                        {
-                            joint.EdgeB.Next.Prev = joint.EdgeB.Prev;
-                        }
-
-                        if (joint.EdgeB == bodyB.JointList)
-                        {
-                            bodyB.JointList = joint.EdgeB.Next;
-                        }
-
-                        joint.EdgeB.Prev = null;
-                        joint.EdgeB.Next = null;
+                        joint.EdgeB.Prev.Next = joint.EdgeB.Next;
                     }
 
-                    // WIP David
-                    if (!joint.IsFixedType())
+                    if (joint.EdgeB.Next != null)
                     {
-                        // If the joint prevents collisions, then flag any contacts for filtering.
-                        if (collideConnected == false)
-                        {
-                            ContactEdge edge = bodyB.ContactList;
-                            while (edge != null)
-                            {
-                                if (edge.Other == bodyA)
-                                {
-                                    // Flag the contact for filtering at the next time step (where either
-                                    // body is awake).
-                                    edge.Contact.FlagForFiltering();
-                                }
+                        joint.EdgeB.Next.Prev = joint.EdgeB.Prev;
+                    }
 
-                                edge = edge.Next;
+                    if (joint.EdgeB == bodyB.JointList)
+                    {
+                        bodyB.JointList = joint.EdgeB.Next;
+                    }
+
+                    joint.EdgeB.Prev = null;
+                    joint.EdgeB.Next = null;
+
+                    // If the joint prevents collisions, then flag any contacts for filtering.
+                    if (collideConnected == false)
+                    {
+                        ContactEdge edge = bodyB.ContactList;
+                        while (edge != null)
+                        {
+                            if (edge.Other == bodyA)
+                            {
+                                // Flag the contact for filtering at the next time step (where either
+                                // body is awake).
+                                edge.Contact.FlagForFiltering();
                             }
+
+                            edge = edge.Next;
                         }
                     }
 
@@ -542,37 +529,33 @@ namespace FarseerPhysics.Dynamics
 
                     joint.BodyA.JointList = joint.EdgeA;
 
-                    // WIP David
-                    if (!joint.IsFixedType())
+                    joint.EdgeB.Joint = joint;
+                    joint.EdgeB.Other = joint.BodyA;
+                    joint.EdgeB.Prev = null;
+                    joint.EdgeB.Next = joint.BodyB.JointList;
+
+                    if (joint.BodyB.JointList != null)
+                        joint.BodyB.JointList.Prev = joint.EdgeB;
+
+                    joint.BodyB.JointList = joint.EdgeB;
+
+                    Body bodyA = joint.BodyA;
+                    Body bodyB = joint.BodyB;
+
+                    // If the joint prevents collisions, then flag any contacts for filtering.
+                    if (joint.CollideConnected == false)
                     {
-                        joint.EdgeB.Joint = joint;
-                        joint.EdgeB.Other = joint.BodyA;
-                        joint.EdgeB.Prev = null;
-                        joint.EdgeB.Next = joint.BodyB.JointList;
-
-                        if (joint.BodyB.JointList != null)
-                            joint.BodyB.JointList.Prev = joint.EdgeB;
-
-                        joint.BodyB.JointList = joint.EdgeB;
-
-                        Body bodyA = joint.BodyA;
-                        Body bodyB = joint.BodyB;
-
-                        // If the joint prevents collisions, then flag any contacts for filtering.
-                        if (joint.CollideConnected == false)
+                        ContactEdge edge = bodyB.ContactList;
+                        while (edge != null)
                         {
-                            ContactEdge edge = bodyB.ContactList;
-                            while (edge != null)
+                            if (edge.Other == bodyA)
                             {
-                                if (edge.Other == bodyA)
-                                {
-                                    // Flag the contact for filtering at the next time step (where either
-                                    // body is awake).
-                                    edge.Contact.FlagForFiltering();
-                                }
-
-                                edge = edge.Next;
+                                // Flag the contact for filtering at the next time step (where either
+                                // body is awake).
+                                edge.Contact.FlagForFiltering();
                             }
+
+                            edge = edge.Next;
                         }
                     }
 

@@ -45,10 +45,6 @@ namespace FarseerPhysics.Dynamics.Joints
         private Jacobian _J;
 
         private float _ant;
-        private FixedPrismaticJoint _fixedPrismatic1;
-        private FixedPrismaticJoint _fixedPrismatic2;
-        private FixedRevoluteJoint _fixedRevolute1;
-        private FixedRevoluteJoint _fixedRevolute2;
         private float _impulse;
         private float _mass;
         private PrismaticJoint _prismatic1;
@@ -76,13 +72,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
             // Make sure its the right kind of joint
             Debug.Assert(type1 == JointType.Revolute ||
-                         type1 == JointType.Prismatic ||
-                         type1 == JointType.FixedRevolute ||
-                         type1 == JointType.FixedPrismatic);
+                         type1 == JointType.Prismatic);
             Debug.Assert(type2 == JointType.Revolute ||
-                         type2 == JointType.Prismatic ||
-                         type2 == JointType.FixedRevolute ||
-                         type2 == JointType.FixedPrismatic);
+                         type2 == JointType.Prismatic);
 
             // In the case of a prismatic and revolute joint, the first body must be static.
             if (type1 == JointType.Revolute || type1 == JointType.Prismatic)
@@ -106,18 +98,6 @@ namespace FarseerPhysics.Dynamics.Joints
                     LocalAnchor1 = _prismatic1.LocalAnchorB;
                     coordinate1 = _prismatic1.JointTranslation;
                     break;
-                case JointType.FixedRevolute:
-                    BodyA = jointA.BodyA;
-                    _fixedRevolute1 = (FixedRevoluteJoint)jointA;
-                    LocalAnchor1 = _fixedRevolute1.LocalAnchorA;
-                    coordinate1 = _fixedRevolute1.JointAngle;
-                    break;
-                case JointType.FixedPrismatic:
-                    BodyA = jointA.BodyA;
-                    _fixedPrismatic1 = (FixedPrismaticJoint)jointA;
-                    LocalAnchor1 = _fixedPrismatic1.LocalAnchorA;
-                    coordinate1 = _fixedPrismatic1.JointTranslation;
-                    break;
             }
 
             switch (type2)
@@ -133,18 +113,6 @@ namespace FarseerPhysics.Dynamics.Joints
                     _prismatic2 = (PrismaticJoint)jointB;
                     LocalAnchor2 = _prismatic2.LocalAnchorB;
                     coordinate2 = _prismatic2.JointTranslation;
-                    break;
-                case JointType.FixedRevolute:
-                    BodyB = jointB.BodyA;
-                    _fixedRevolute2 = (FixedRevoluteJoint)jointB;
-                    LocalAnchor2 = _fixedRevolute2.LocalAnchorA;
-                    coordinate2 = _fixedRevolute2.JointAngle;
-                    break;
-                case JointType.FixedPrismatic:
-                    BodyB = jointB.BodyA;
-                    _fixedPrismatic2 = (FixedPrismaticJoint)jointB;
-                    LocalAnchor2 = _fixedPrismatic2.LocalAnchorA;
-                    coordinate2 = _fixedPrismatic2.JointTranslation;
                     break;
             }
 
@@ -205,18 +173,14 @@ namespace FarseerPhysics.Dynamics.Joints
             float K = 0.0f;
             _J.SetZero();
 
-            if (_revolute1 != null || _fixedRevolute1 != null)
+            if (_revolute1 != null)
             {
                 _J.AngularA = -1.0f;
                 K += b1.InvI;
             }
-            else
+            else if (_prismatic1 != null)
             {
-                Vector2 ug;
-                if (_prismatic1 != null)
-                    ug = _prismatic1.LocalXAxis1; // MathUtils.Multiply(ref xfg1.R, _prismatic1.LocalXAxis1);
-                else
-                    ug = _fixedPrismatic1.LocalXAxis1; // MathUtils.Multiply(ref xfg1.R, _prismatic1.LocalXAxis1);
+                Vector2 ug = _prismatic1.LocalXAxis1; // MathUtils.Multiply(ref xfg1.R, _prismatic1.LocalXAxis1);
 
                 Transform xf1 /*, xfg1*/;
                 b1.GetTransform(out xf1);
@@ -230,18 +194,14 @@ namespace FarseerPhysics.Dynamics.Joints
                 K += b1.InvMass + b1.InvI * crug * crug;
             }
 
-            if (_revolute2 != null || _fixedRevolute2 != null)
+            if (_revolute2 != null)
             {
                 _J.AngularB = -Ratio;
                 K += Ratio * Ratio * b2.InvI;
             }
-            else
+            else if (_prismatic2 != null)
             {
-                Vector2 ug;
-                if (_prismatic2 != null)
-                    ug = _prismatic2.LocalXAxis1; // MathUtils.Multiply(ref xfg1.R, _prismatic1.LocalXAxis1);
-                else
-                    ug = _fixedPrismatic2.LocalXAxis1; // MathUtils.Multiply(ref xfg1.R, _prismatic1.LocalXAxis1);
+                Vector2 ug = _prismatic2.LocalXAxis1; // MathUtils.Multiply(ref xfg1.R, _prismatic1.LocalXAxis1);
 
                 Transform /*xfg1,*/ xf2;
                 //g1.GetTransform(out xfg1);
@@ -301,34 +261,18 @@ namespace FarseerPhysics.Dynamics.Joints
             {
                 coordinate1 = _revolute1.JointAngle;
             }
-            else if (_fixedRevolute1 != null)
-            {
-                coordinate1 = _fixedRevolute1.JointAngle;
-            }
             else if (_prismatic1 != null)
             {
                 coordinate1 = _prismatic1.JointTranslation;
-            }
-            else if (_fixedPrismatic1 != null)
-            {
-                coordinate1 = _fixedPrismatic1.JointTranslation;
             }
 
             if (_revolute2 != null)
             {
                 coordinate2 = _revolute2.JointAngle;
             }
-            else if (_fixedRevolute2 != null)
-            {
-                coordinate2 = _fixedRevolute2.JointAngle;
-            }
             else if (_prismatic2 != null)
             {
                 coordinate2 = _prismatic2.JointTranslation;
-            }
-            else if (_fixedPrismatic2 != null)
-            {
-                coordinate2 = _fixedPrismatic2.JointTranslation;
             }
 
             float C = _ant - (coordinate1 + Ratio * coordinate2);

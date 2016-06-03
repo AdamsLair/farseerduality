@@ -40,22 +40,6 @@ namespace FarseerPhysics.Factories
             return joint;
         }
 
-        /// <summary>
-        /// Creates the fixed revolute joint.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="body">The body.</param>
-        /// <param name="bodyAnchor">The body anchor.</param>
-        /// <param name="worldAnchor">The world anchor.</param>
-        /// <returns></returns>
-        public static FixedRevoluteJoint CreateFixedRevoluteJoint(World world, Body body, Vector2 bodyAnchor,
-                                                                  Vector2 worldAnchor)
-        {
-            FixedRevoluteJoint fixedRevoluteJoint = new FixedRevoluteJoint(body, bodyAnchor, worldAnchor);
-            world.AddJoint(fixedRevoluteJoint);
-            return fixedRevoluteJoint;
-        }
-
         #endregion
 
         #region Weld Joint
@@ -133,14 +117,6 @@ namespace FarseerPhysics.Factories
             return joint;
         }
 
-        public static FixedPrismaticJoint CreateFixedPrismaticJoint(World world, Body body, Vector2 worldAnchor,
-                                                                    Vector2 axis)
-        {
-            FixedPrismaticJoint joint = new FixedPrismaticJoint(body, worldAnchor, axis);
-            world.AddJoint(joint);
-            return joint;
-        }
-
         #endregion
 
         #region Line Joint
@@ -194,20 +170,6 @@ namespace FarseerPhysics.Factories
             return angleJoint;
         }
 
-        /// <summary>
-        /// Creates a fixed angle joint.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="body">The body.</param>
-        /// <returns></returns>
-        public static FixedAngleJoint CreateFixedAngleJoint(World world, Body body)
-        {
-            FixedAngleJoint angleJoint = new FixedAngleJoint(body);
-            world.AddJoint(angleJoint);
-
-            return angleJoint;
-        }
-
         #endregion
 
         #region Distance Joint
@@ -220,14 +182,6 @@ namespace FarseerPhysics.Factories
             return distanceJoint;
         }
 
-        public static FixedDistanceJoint CreateFixedDistanceJoint(World world, Body body, Vector2 localAnchor,
-                                                                  Vector2 worldAnchor)
-        {
-            FixedDistanceJoint distanceJoint = new FixedDistanceJoint(body, localAnchor, worldAnchor);
-            world.AddJoint(distanceJoint);
-            return distanceJoint;
-        }
-
         #endregion
 
         #region Friction Joint
@@ -236,13 +190,6 @@ namespace FarseerPhysics.Factories
                                                         Vector2 anchorB)
         {
             FrictionJoint frictionJoint = new FrictionJoint(bodyA, bodyB, anchorA, anchorB);
-            world.AddJoint(frictionJoint);
-            return frictionJoint;
-        }
-
-        public static FixedFrictionJoint CreateFixedFrictionJoint(World world, Body body, Vector2 bodyAnchor)
-        {
-            FixedFrictionJoint frictionJoint = new FixedFrictionJoint(body, bodyAnchor);
             world.AddJoint(frictionJoint);
             return frictionJoint;
         }

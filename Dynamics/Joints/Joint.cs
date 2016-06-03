@@ -41,14 +41,7 @@ namespace FarseerPhysics.Dynamics.Joints
         Friction,
         Slider,
         Angle,
-        Rope,
-        FixedMouse,
-        FixedRevolute,
-        FixedDistance,
-        FixedLine,
-        FixedPrismatic,
-        FixedAngle,
-        FixedFriction,
+        Rope
     }
 
     public enum LimitState
@@ -238,20 +231,6 @@ namespace FarseerPhysics.Dynamics.Joints
             {
                 BodyB.Awake = true;
             }
-        }
-
-        /// <summary>
-        /// Return true if the joint is a fixed type.
-        /// </summary>
-        public bool IsFixedType()
-        {
-            return JointType == JointType.FixedRevolute ||
-                   JointType == JointType.FixedDistance ||
-                   JointType == JointType.FixedPrismatic ||
-                   JointType == JointType.FixedLine ||
-                   JointType == JointType.FixedMouse ||
-                   JointType == JointType.FixedAngle ||
-                   JointType == JointType.FixedFriction;
         }
 
         internal abstract void InitVelocityConstraints(ref TimeStep step);

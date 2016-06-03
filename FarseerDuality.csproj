@@ -117,13 +117,6 @@
     <Compile Include="Dynamics\Island.cs" />
     <Compile Include="Dynamics\Joints\AngleJoint.cs" />
     <Compile Include="Dynamics\Joints\DistanceJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedAngleJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedDistanceJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedFrictionJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedLineJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedMouseJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedPrismaticJoint.cs" />
-    <Compile Include="Dynamics\Joints\FixedRevoluteJoint.cs" />
     <Compile Include="Dynamics\Joints\FrictionJoint.cs" />
     <Compile Include="Dynamics\Joints\GearJoint.cs" />
     <Compile Include="Dynamics\Joints\Joint.cs" />
