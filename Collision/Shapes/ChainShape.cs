@@ -43,42 +43,35 @@ namespace FarseerPhysics.Collision.Shapes
         /// The vertices. These are not owned/freed by the loop Shape.
         /// </summary>
         public Vertices Vertices;
-        private Vector2 _prevVertex, _nextVertex;
-        private bool _hasPrevVertex, _hasNextVertex;
+        public Vector2 PrevVertex;
+        public Vector2 NextVertex;
+        public bool HasPrevVertex;
+        public bool HasNextVertex;
 
-        private ChainShape()
+        public override int ChildCount
+        {
+            get { return Vertices.Count - 1; }
+        }
+
+        public ChainShape()
             : base(0)
         {
             ShapeType = ShapeType.Chain;
             _radius = Settings.PolygonRadius;
         }
-
         /// <summary>
         /// Create a new chainshape from the vertices.
         /// </summary>
         /// <param name="vertices">The vertices to use. Must contain 2 or more vertices.</param>
         /// <param name="createLoop">Set to true to create a closed loop. It connects the first vertice to the last, and automatically adjusts connectivity to create smooth collisions along the chain.</param>
-        public ChainShape(Vertices vertices, bool createLoop)
-            : this()
+        public ChainShape(Vertices vertices, bool createLoop) : this()
         {
             Debug.Assert(vertices != null && vertices.Count >= 3);
-            Debug.Assert(vertices[0] != vertices[vertices.Count - 1]); // FPE. See http://www.box2d.org/forum/viewtopic.php?f=4&t=7973&p=35363
 
             Vertices = new Vertices(vertices);
 
-            if (createLoop)
-            {
-                Vertices.Add(vertices[0]);
-                _prevVertex = Vertices[Vertices.Count - 2]; //FPE: We use the properties instead of the private fields here.
-                _nextVertex = Vertices[1]; //FPE: We use the properties instead of the private fields here.
-                _hasPrevVertex = true;
-                _hasNextVertex = true;
-            }
-        }
-
-        public override int ChildCount
-        {
-            get { return Vertices.Count - 1; }
+			if (createLoop)
+				this.MakeLoop();
         }
 
         public override Shape Clone()
@@ -86,20 +79,52 @@ namespace FarseerPhysics.Collision.Shapes
             ChainShape clone = new ChainShape();
             clone._density = _density;
             clone._radius = _radius;
-            clone._prevVertex = _prevVertex;
-            clone._nextVertex = _nextVertex;
-            clone._hasNextVertex = _hasNextVertex;
-            clone._hasPrevVertex = _hasPrevVertex;
+            clone.PrevVertex = PrevVertex;
+            clone.NextVertex = NextVertex;
+            clone.HasNextVertex = HasNextVertex;
+            clone.HasPrevVertex = HasPrevVertex;
             clone.Vertices = Vertices;
             clone.MassData = MassData;
             return clone;
         }
 
         /// <summary>
-        /// Get a child edge.
+        /// Adjusts the shapes previous and next vertex settings in order
+        /// to form a loop shape. This requires the first vertex to equal
+        /// the last one. If this is not the case, a new vertex will be
+        /// added to close the loop.
         /// </summary>
-        /// <param name="edge">The edge.</param>
-        /// <param name="index">The index.</param>
+        public void MakeLoop()
+        {
+			// Close the loop, if this is not done yet
+			if (Vertices[0] != Vertices[Vertices.Count - 1])
+			{
+				Vertices.Add(Vertices[0]);
+			}
+
+            PrevVertex = Vertices[Vertices.Count - 2]; //FPE: We use the properties instead of the private fields here.
+            NextVertex = Vertices[1]; //FPE: We use the properties instead of the private fields here.
+            HasPrevVertex = true;
+            HasNextVertex = true;
+        }
+		/// <summary>
+        /// Adjusts the shapes previous and next vertex settings in order
+        /// to form a chain shape. This requires the first vertex to not 
+		/// equal the last one. If this is the case, the last vertex will be
+        /// removed to break the loop.
+		/// </summary>
+		public void MakeChain()
+		{
+			// Break the loop, if required
+			if (Vertices[0] == Vertices[Vertices.Count - 1])
+			{
+				Vertices.RemoveAt(Vertices.Count - 1);
+			}
+
+            HasPrevVertex = false;
+            HasNextVertex = false;
+		}
+
         public void GetChildEdge(ref EdgeShape edge, int index)
         {
             Debug.Assert(2 <= Vertices.Count);
@@ -117,8 +142,8 @@ namespace FarseerPhysics.Collision.Shapes
             }
             else
             {
-                edge.Vertex0 = _prevVertex;
-                edge.HasVertex0 = _hasPrevVertex;
+                edge.Vertex0 = PrevVertex;
+                edge.HasVertex0 = HasPrevVertex;
             }
 
             if (index < Vertices.Count - 2)
@@ -128,8 +153,8 @@ namespace FarseerPhysics.Collision.Shapes
             }
             else
             {
-                edge.Vertex3 = _nextVertex;
-                edge.HasVertex3 = _hasNextVertex;
+                edge.Vertex3 = NextVertex;
+                edge.HasVertex3 = HasNextVertex;
             }
             
             // Old hack-fix for jittery collision at sharp (<90°) angles.
@@ -148,7 +173,6 @@ namespace FarseerPhysics.Collision.Shapes
         {
             return false;
         }
-
         /// <summary>
         /// Cast a ray against a child shape.
         /// </summary>
@@ -174,7 +198,6 @@ namespace FarseerPhysics.Collision.Shapes
 
             return _edgeShape.RayCast(out output, ref input, ref transform, 0);
         }
-
         /// <summary>
         /// Given a transform, compute the associated axis aligned bounding box for a child shape.
         /// </summary>
@@ -198,15 +221,13 @@ namespace FarseerPhysics.Collision.Shapes
             aabb.LowerBound = Vector2.Min(v1, v2);
             aabb.UpperBound = Vector2.Max(v1, v2);
         }
-
         /// <summary>
         /// Chains have zero mass.
         /// </summary>
         public override void ComputeProperties()
         {
-            //Does nothing. Loop shapes don't have properties.
+            // Does nothing. Loop shapes don't have properties.
         }
-
         public override float ComputeSubmergedArea(Vector2 normal, float offset, Transform xf, out Vector2 sc)
         {
             sc = Vector2.Zero;
