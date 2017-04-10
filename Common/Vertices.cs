@@ -7,6 +7,44 @@ using Duality;
 
 namespace FarseerPhysics.Common
 {
+    public enum PolygonError
+    {
+        /// <summary>
+        /// There were no errors in the polygon
+        /// </summary>
+        NoError,
+
+        /// <summary>
+        /// Polygon must have between 3 and Settings.MaxPolygonVertices vertices.
+        /// </summary>
+        InvalidAmountOfVertices,
+
+        /// <summary>
+        /// Polygon must be simple. This means no overlapping edges.
+        /// </summary>
+        NotSimple,
+
+        /// <summary>
+        /// Polygon must have a counter clockwise winding.
+        /// </summary>
+        NotCounterClockWise,
+
+        /// <summary>
+        /// The polygon is concave, it needs to be convex.
+        /// </summary>
+        NotConvex,
+
+        /// <summary>
+        /// Polygon area is too small.
+        /// </summary>
+        AreaTooSmall,
+
+        /// <summary>
+        /// The polygon has a side that is too short.
+        /// </summary>
+        SideTooSmall
+    }
+
     [DebuggerDisplay("Count = {Count} Vertices = {ToString()}")]
     public class Vertices : List<Vector2>
     {
@@ -324,184 +362,44 @@ namespace FarseerPhysics.Common
             return true;
         }
 
-        //TODO: Test
-        //Implementation found here: http://www.gamedev.net/community/forums/topic.asp?topic_id=548477
-        public bool IsSimple2()
-        {
-            for (int i = 0; i < Count; ++i)
-            {
-                if (i < Count - 1)
-                {
-                    for (int h = i + 1; h < Count; ++h)
-                    {
-                        // Do two vertices lie on top of one another?
-                        if (this[i] == this[h])
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                int j = (i + 1) % Count;
-                Vector2 iToj = this[j] - this[i];
-                Vector2 iTojNormal = new Vector2(iToj.Y, -iToj.X);
-
-                // i is the first vertex and j is the second
-                int startK = (j + 1) % Count;
-                int endK = (i - 1 + Count) % Count;
-                endK += startK < endK ? 0 : startK + 1;
-                int k = startK;
-                Vector2 iTok = this[k] - this[i];
-                bool onLeftSide = Vector2.Dot(iTok, iTojNormal) >= 0;
-                Vector2 prevK = this[k];
-                ++k;
-                for (; k <= endK; ++k)
-                {
-                    int modK = k % Count;
-                    iTok = this[modK] - this[i];
-                    if (onLeftSide != Vector2.Dot(iTok, iTojNormal) >= 0)
-                    {
-                        Vector2 prevKtoK = this[modK] - prevK;
-                        Vector2 prevKtoKNormal = new Vector2(prevKtoK.Y, -prevKtoK.X);
-                        if ((Vector2.Dot(this[i] - prevK, prevKtoKNormal) >= 0) !=
-                            (Vector2.Dot(this[j] - prevK, prevKtoKNormal) >= 0))
-                        {
-                            return true;
-                        }
-                    }
-                    onLeftSide = Vector2.Dot(iTok, iTojNormal) > 0;
-                    prevK = this[modK];
-                }
-            }
-            return false;
-        }
-
-        // From Eric Jordan's convex decomposition library
-
         /// <summary>
-        /// Checks if polygon is valid for use in Box2d engine.
-        /// Last ditch effort to ensure no invalid polygons are
-        /// added to world geometry.
+        /// Checks if the polygon is valid for use in the engine.
         ///
         /// Performs a full check, for simplicity, convexity,
-        /// orientation, minimum angle, and volume.  This won't
-        /// be very efficient, and a lot of it is redundant when
-        /// other tools in this section are used.
+        /// orientation, minimum angle, and volume.
+        /// 
+        /// From Eric Jordan's convex decomposition library
         /// </summary>
-        /// <returns></returns>
-        public bool CheckPolygon()
+        /// <returns>PolygonError.NoError if there were no error.</returns>
+        public PolygonError CheckPolygon()
         {
-            int error = -1;
             if (Count < 3 || Count > Settings.MaxPolygonVertices)
-            {
-                error = 0;
-            }
-            if (!IsConvex())
-            {
-                error = 1;
-            }
+                return PolygonError.InvalidAmountOfVertices;
+
             if (!IsSimple())
-            {
-                error = 2;
-            }
-            if (GetArea() < Settings.Epsilon)
-            {
-                error = 3;
-            }
+                return PolygonError.NotSimple;
 
-            //Compute normals
-            Vector2[] normals = new Vector2[Count];
-            Vertices vertices = new Vertices(Count);
+            if (GetArea() <= Settings.Epsilon)
+                return PolygonError.AreaTooSmall;
+
+            if (!IsConvex())
+                return PolygonError.NotConvex;
+
+            //Check if the sides are of adequate length.
             for (int i = 0; i < Count; ++i)
             {
-                vertices.Add(new Vector2(this[i].X, this[i].Y));
-                int i1 = i;
-                int i2 = i + 1 < Count ? i + 1 : 0;
-                Vector2 edge = new Vector2(this[i2].X - this[i1].X, this[i2].Y - this[i1].Y);
-                normals[i] = MathUtils.Cross(edge, 1.0f);
-                normals[i].Normalize();
-            }
-
-            //Required side checks
-            for (int i = 0; i < Count; ++i)
-            {
-                int iminus = (i == 0) ? Count - 1 : i - 1;
-
-                //Parallel sides check
-                float cross = MathUtils.Cross(normals[iminus], normals[i]);
-                cross = MathUtils.Clamp(cross, -1.0f, 1.0f);
-                float angle = (float)Math.Asin(cross);
-                if (angle <= Settings.AngularSlop)
+                int next = i + 1 < Count ? i + 1 : 0;
+                Vector2 edge = this[next] - this[i];
+                if (edge.LengthSquared <= Settings.Epsilon*Settings.Epsilon)
                 {
-                    error = 4;
-                    break;
-                }
-
-                //Too skinny check
-                for (int j = 0; j < Count; ++j)
-                {
-                    if (j == i || j == (i + 1) % Count)
-                    {
-                        continue;
-                    }
-                    float s = Vector2.Dot(normals[i], vertices[j] - vertices[i]);
-                    if (s >= -Settings.LinearSlop)
-                    {
-                        error = 5;
-                    }
-                }
-
-
-                Vector2 centroid = vertices.GetCentroid();
-                Vector2 n1 = normals[iminus];
-                Vector2 n2 = normals[i];
-                Vector2 v = vertices[i] - centroid;
-
-                Vector2 d = new Vector2();
-                d.X = Vector2.Dot(n1, v); // - toiSlop;
-                d.Y = Vector2.Dot(n2, v); // - toiSlop;
-
-                // Shifting the edge inward by toiSlop should
-                // not cause the plane to pass the centroid.
-                if ((d.X < 0.0f) || (d.Y < 0.0f))
-                {
-                    error = 6;
+                    return PolygonError.SideTooSmall;
                 }
             }
 
-            if (error != -1)
-            {
-                Debug.WriteLine("Found invalid polygon, ");
-                switch (error)
-                {
-                    case 0:
-                        Debug.WriteLine(string.Format("must have between 3 and {0} vertices.\n",
-                                                      Settings.MaxPolygonVertices));
-                        break;
-                    case 1:
-                        Debug.WriteLine("must be convex.\n");
-                        break;
-                    case 2:
-                        Debug.WriteLine("must be simple (cannot intersect itself).\n");
-                        break;
-                    case 3:
-                        Debug.WriteLine("area is too small.\n");
-                        break;
-                    case 4:
-                        Debug.WriteLine("sides are too close to parallel.\n");
-                        break;
-                    case 5:
-                        Debug.WriteLine("polygon is too thin.\n");
-                        break;
-                    case 6:
-                        Debug.WriteLine("core shape generation would move edge past centroid (too thin).\n");
-                        break;
-                    default:
-                        Debug.WriteLine("don't know why.\n");
-                        break;
-                }
-            }
-            return error != -1;
+            if (!IsCounterClockWise())
+                return PolygonError.NotCounterClockWise;
+
+            return PolygonError.NoError;
         }
 
         // From Eric Jordan's convex decomposition library
