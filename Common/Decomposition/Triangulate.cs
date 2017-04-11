@@ -139,17 +139,15 @@ namespace FarseerPhysics.Common.Decomposition
         {
             PolygonError errorCode = polygon.CheckPolygon();
 
-            if (errorCode == PolygonError.InvalidAmountOfVertices || errorCode == PolygonError.AreaTooSmall || errorCode == PolygonError.SideTooSmall || errorCode == PolygonError.NotSimple)
+            if (errorCode == PolygonError.InvalidAmountOfVertices || 
+                errorCode == PolygonError.AreaTooSmall || 
+                errorCode == PolygonError.SideTooSmall || 
+                errorCode == PolygonError.NotSimple || 
+                errorCode == PolygonError.NotConvex)
                 return false;
 
             if (errorCode == PolygonError.NotCounterClockWise) //NotCounterCloseWise is the last check in CheckPolygon(), thus we don't need to call ValidatePolygon again.
                 polygon.Reverse();
-
-            if (errorCode == PolygonError.NotConvex)
-            {
-                polygon = GiftWrap.GetConvexHull(polygon);
-                return ValidatePolygon(polygon);
-            }
 
             return true;
         }
