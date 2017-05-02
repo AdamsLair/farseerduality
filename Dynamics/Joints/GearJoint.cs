@@ -60,7 +60,7 @@ namespace FarseerPhysics.Dynamics.Joints
         /// <param name="jointB">The second joint.</param>
         /// <param name="ratio">The ratio.</param>
         public GearJoint(Joint jointA, Joint jointB, float ratio)
-            : base(jointA.BodyA, jointA.BodyB)
+            : base(jointA.BodyA, jointA.BodyA)
         {
             JointType = JointType.Gear;
             JointA = jointA;
@@ -78,24 +78,24 @@ namespace FarseerPhysics.Dynamics.Joints
 
             // In the case of a prismatic and revolute joint, the first body must be static.
             if (type1 == JointType.Revolute || type1 == JointType.Prismatic)
-                Debug.Assert(jointA.BodyA.BodyType == BodyType.Static);
+                Debug.Assert(jointA.BodyB.BodyType == BodyType.Static);
             if (type2 == JointType.Revolute || type2 == JointType.Prismatic)
-                Debug.Assert(jointB.BodyA.BodyType == BodyType.Static);
+                Debug.Assert(jointB.BodyB.BodyType == BodyType.Static);
 
             float coordinate1 = 0.0f, coordinate2 = 0.0f;
 
             switch (type1)
             {
                 case JointType.Revolute:
-                    BodyA = jointA.BodyB;
+                    BodyA = jointA.BodyA;
                     _revolute1 = (RevoluteJoint)jointA;
-                    LocalAnchor1 = _revolute1.LocalAnchorB;
+                    LocalAnchor1 = _revolute1.LocalAnchorA;
                     coordinate1 = _revolute1.JointAngle;
                     break;
                 case JointType.Prismatic:
-                    BodyA = jointA.BodyB;
+                    BodyA = jointA.BodyA;
                     _prismatic1 = (PrismaticJoint)jointA;
-                    LocalAnchor1 = _prismatic1.LocalAnchorB;
+                    LocalAnchor1 = _prismatic1.LocalAnchorA;
                     coordinate1 = _prismatic1.JointTranslation;
                     break;
             }
@@ -103,15 +103,15 @@ namespace FarseerPhysics.Dynamics.Joints
             switch (type2)
             {
                 case JointType.Revolute:
-                    BodyB = jointB.BodyB;
+                    BodyB = jointB.BodyA;
                     _revolute2 = (RevoluteJoint)jointB;
-                    LocalAnchor2 = _revolute2.LocalAnchorB;
+                    LocalAnchor2 = _revolute2.LocalAnchorA;
                     coordinate2 = _revolute2.JointAngle;
                     break;
                 case JointType.Prismatic:
-                    BodyB = jointB.BodyB;
+                    BodyB = jointB.BodyA;
                     _prismatic2 = (PrismaticJoint)jointB;
-                    LocalAnchor2 = _prismatic2.LocalAnchorB;
+                    LocalAnchor2 = _prismatic2.LocalAnchorA;
                     coordinate2 = _prismatic2.JointTranslation;
                     break;
             }
